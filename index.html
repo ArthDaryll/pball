@@ -1,0 +1,1894 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zero Zero Two Cebu — Unsay Score? Court Finder Ni!</title>
+    <meta
+      name="description"
+      content="Find pickleball courts, check real-time schedules, rent gear, and locate open-play sessions across Metro Cebu."
+    />
+    <meta property="og:title" content="Zero Zero Two Cebu — Unsay Score? Court Finder Ni!" />
+    <meta
+      property="og:description"
+      content="Find pickleball courts, check real-time schedules, rent gear, and locate open-play sessions across Metro Cebu."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Athletic Condensed Display + Clean Geometric Body + Tabular Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS via CDN (Self-Contained Single-Page Requirement) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              navy: {
+                950: '#07111F',
+                900: '#0B192C',
+                800: '#122640',
+                700: '#1B365C',
+              },
+              pickle: {
+                300: '#DCF965',
+                400: '#C8F135',
+                500: '#B2DC1E',
+              },
+            },
+            fontFamily: {
+              display: ['"Barlow Condensed"', 'sans-serif'],
+              sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'monospace'],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #f8fafc;
+        color: #0b192c;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .tabular-nums {
+        font-variant-numeric: tabular-nums;
+      }
+
+      .text-balance {
+        text-wrap: balance;
+      }
+
+      /* Subtle architectural court grid texture for deep navy hero & cards */
+      .court-surface-grid {
+        background-image:
+          linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        background-size: 48px 48px;
+      }
+
+      /* Accessible focus visibility */
+      :focus-visible {
+        outline: 2px solid #c8f135;
+        outline-offset: 2px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          transition-duration: 0.01ms !important;
+          animation-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body id="home" class="min-h-screen flex flex-col bg-slate-50 text-navy-900 selection:bg-pickle-400 selection:text-navy-950">
+    <!-- 1. NAVIGATION BAR (HEADER) -->
+    <header class="sticky top-0 z-40 bg-navy-900/95 backdrop-blur-md border-b border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-8">
+        <!-- Zone 1: Brand Wordmark + Requested Tagline -->
+        <a href="#home" class="flex items-baseline gap-3 whitespace-nowrap shrink-0 group">
+          <span class="font-display text-2xl sm:text-[26px] font-bold tracking-tight text-white group-hover:text-pickle-400 transition-colors duration-150">
+            Zero Zero Two Cebu
+          </span>
+          <span class="hidden xl:inline text-xs font-medium text-slate-300 tracking-wide">
+            Unsay Score? Court Finder Ni!
+          </span>
+        </a>
+
+        <!-- Zone 2: Primary Navigation Links -->
+        <nav aria-label="Primary Navigation" class="hidden md:flex items-center gap-6 lg:gap-7 text-sm font-medium text-slate-200">
+          <a href="#home" class="hover:text-pickle-400 py-1 border-b-2 border-transparent hover:border-pickle-400 transition-colors duration-150 whitespace-nowrap shrink-0">
+            Home
+          </a>
+          <a href="#courts" class="hover:text-pickle-400 py-1 border-b-2 border-transparent hover:border-pickle-400 transition-colors duration-150 whitespace-nowrap shrink-0">
+            Find Courts
+          </a>
+          <a href="#map" class="hover:text-pickle-400 py-1 border-b-2 border-transparent hover:border-pickle-400 transition-colors duration-150 whitespace-nowrap shrink-0">
+            Interactive Map
+          </a>
+          <a href="#rules" class="hover:text-pickle-400 py-1 border-b-2 border-transparent hover:border-pickle-400 transition-colors duration-150 whitespace-nowrap shrink-0">
+            Rules
+          </a>
+          <a href="#contact" class="hover:text-pickle-400 py-1 border-b-2 border-transparent hover:border-pickle-400 transition-colors duration-150 whitespace-nowrap shrink-0">
+            Contact Us
+          </a>
+        </nav>
+
+        <!-- Zone 3: Single Primary Action + Mobile Menu Button -->
+        <div class="flex items-center gap-3 shrink-0">
+          <a
+            href="#courts"
+            class="hidden sm:inline-flex items-center justify-center px-4 py-2 text-xs sm:text-sm font-semibold bg-pickle-400 text-navy-950 rounded-lg hover:bg-pickle-300 transition-colors duration-150 whitespace-nowrap shrink-0"
+          >
+            Explore Cebu Courts
+          </a>
+
+          <button
+            id="mobile-menu-btn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            aria-label="Toggle navigation menu"
+            class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 transition-colors duration-150"
+          >
+            <svg id="menu-icon-open" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown Menu -->
+      <div id="mobile-menu" class="hidden md:hidden bg-navy-950 border-t border-white/10 px-4 pt-3 pb-5">
+        <p class="text-xs text-pickle-400 font-medium mb-3">Unsay Score? Court Finder Ni!</p>
+        <div class="flex flex-col space-y-1 text-sm font-medium text-slate-200">
+          <a href="#home" class="mobile-nav-link py-2.5 px-3 rounded-lg hover:bg-white/5 hover:text-pickle-400">Home</a>
+          <a href="#courts" class="mobile-nav-link py-2.5 px-3 rounded-lg hover:bg-white/5 hover:text-pickle-400">Find Courts</a>
+          <a href="#pricing" class="mobile-nav-link py-2.5 px-3 rounded-lg hover:bg-white/5 hover:text-pickle-400">Rates &amp; Rentals</a>
+          <a href="#map" class="mobile-nav-link py-2.5 px-3 rounded-lg hover:bg-white/5 hover:text-pickle-400">Interactive Map</a>
+          <a href="#rules" class="mobile-nav-link py-2.5 px-3 rounded-lg hover:bg-white/5 hover:text-pickle-400">Rules</a>
+          <a href="#contact" class="mobile-nav-link py-2.5 px-3 rounded-lg hover:bg-white/5 hover:text-pickle-400">Contact Us</a>
+        </div>
+        <a
+          href="#courts"
+          class="mobile-nav-link mt-4 w-full inline-flex items-center justify-center px-4 py-2.5 text-sm font-semibold bg-pickle-400 text-navy-950 rounded-lg hover:bg-pickle-300"
+        >
+          Explore Cebu Courts
+        </a>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <!-- 2. HERO SECTION -->
+      <section class="relative bg-navy-900 text-white court-surface-grid overflow-hidden border-b border-navy-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-14 lg:pt-16 lg:pb-16">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
+            <!-- Left Column: Proposition & Action -->
+            <div class="lg:col-span-6 flex flex-col justify-center">
+              <p class="text-sm font-medium text-pickle-400 tracking-wide mb-3">
+                Metro Cebu Pickleball Directory · Mandaue · Banilad · Cebu City · Lapu-Lapu
+              </p>
+
+              <h1
+                class="font-display font-bold text-white tracking-tight text-balance leading-[1.03]"
+                style="font-size: clamp(2.75rem, 5vw, 4.25rem);"
+              >
+                Unsay Score? Court Finder Ni!
+              </h1>
+
+              <p class="mt-5 text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl">
+                Find courts, check real-time schedules, rent gear, and locate open-play sessions across Metro Cebu. Built for first-timers learning the kitchen and regulars chasing a fifth game to 11.
+              </p>
+
+              <div class="mt-8 flex flex-wrap items-center gap-4">
+                <a
+                  href="#courts"
+                  class="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-semibold bg-pickle-400 text-navy-950 rounded-lg hover:bg-pickle-300 transition-colors duration-150 whitespace-nowrap shrink-0"
+                >
+                  <span>Explore Cebu Courts</span>
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </a>
+
+                <a
+                  href="#pricing"
+                  class="inline-flex items-center justify-center px-5 py-3.5 text-sm sm:text-base font-medium text-slate-200 border border-white/20 rounded-lg hover:bg-white/10 hover:text-white transition-colors duration-150 whitespace-nowrap shrink-0"
+                >
+                  View Standard Rates
+                </a>
+              </div>
+
+              <div class="mt-8 pt-6 border-t border-white/10 text-xs sm:text-sm text-slate-300 flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span>24/7 Indoor AC Arenas</span>
+                <span aria-hidden="true" class="text-slate-500">·</span>
+                <span>₱150 Drop-In Open Play Queues</span>
+                <span aria-hidden="true" class="text-slate-500">·</span>
+                <span>₱50 Paddle Rentals</span>
+              </div>
+            </div>
+
+            <!-- Right Column: High-Impact 16:9 Cebu Court Visual with Resilient Fallback -->
+            <div class="lg:col-span-6 flex">
+              <div class="relative w-full rounded-xl overflow-hidden border border-white/15 bg-navy-800 min-h-[280px] sm:min-h-[340px] lg:h-full">
+                <!-- Fallback Base Layer -->
+                <div class="absolute inset-0 bg-gradient-to-br from-navy-800 via-navy-900 to-navy-950 flex flex-col items-center justify-center p-8 text-center">
+                  <svg class="w-14 h-14 text-pickle-400/70 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="9" />
+                    <circle cx="9" cy="10" r="1" fill="currentColor" />
+                    <circle cx="15" cy="10" r="1" fill="currentColor" />
+                    <circle cx="12" cy="14" r="1" fill="currentColor" />
+                  </svg>
+                  <p class="font-display text-xl text-white">Metro Cebu Covered &amp; Indoor Courts</p>
+                  <p class="text-xs text-slate-400 mt-1">Cushioned Acrylic · Tournament Netting · Open Play Ready</p>
+                </div>
+
+                <!-- Primary Generated Image -->
+                <img
+                  src="/src/assets/images/hero_cebu_pickleball_court_1792925413322.jpg"
+                  alt="Players rallying at a covered pickleball court facility in Metro Cebu during golden hour"
+                  referrerpolicy="no-referrer"
+                  onerror="this.style.display='none'"
+                  class="relative z-10 w-full h-full object-cover"
+                />
+
+                <!-- Measured Contrast Scrim for Caption -->
+                <div class="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-navy-950/90 via-navy-950/50 to-transparent p-5 sm:p-6">
+                  <p class="text-xs text-pickle-400 font-medium">Featured Metro Cebu Hub</p>
+                  <p class="text-sm sm:text-base font-semibold text-white mt-0.5">
+                    High-canopy covered &amp; climate-controlled courts built for tropical play
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Full-Width 4-Column Metro Cebu Directory Snapshot -->
+          <div class="mt-10 pt-8 border-t border-white/10 grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            <div>
+              <p class="font-display text-3xl sm:text-4xl font-bold text-pickle-400 tabular-nums">9</p>
+              <p class="mt-1 text-sm font-medium text-white">Verified Cebu Facilities</p>
+              <p class="text-xs text-slate-400 mt-0.5">Mandaue, Banilad, Cebu City &amp; Mactan</p>
+            </div>
+            <div>
+              <p class="font-display text-3xl sm:text-4xl font-bold text-white tabular-nums">41</p>
+              <p class="mt-1 text-sm font-medium text-white">Dedicated Pickleball Courts</p>
+              <p class="text-xs text-slate-400 mt-0.5">Indoor AC, covered steel-canopy &amp; floodlit</p>
+            </div>
+            <div>
+              <p class="font-display text-3xl sm:text-4xl font-bold text-white tabular-nums">₱300–₱750</p>
+              <p class="mt-1 text-sm font-medium text-white">Hourly Court Rates</p>
+              <p class="text-xs text-slate-400 mt-0.5">As low as ₱75–₱188 per player in doubles</p>
+            </div>
+            <div>
+              <p class="font-display text-3xl sm:text-4xl font-bold text-white tabular-nums">24/7</p>
+              <p class="mt-1 text-sm font-medium text-white">Late-Night &amp; All-Day Play</p>
+              <p class="text-xs text-slate-400 mt-0.5">Early 6 AM sessions to midnight rallies</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. COMPREHENSIVE COURT DIRECTORY -->
+      <section id="courts" class="py-16 lg:py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <!-- Section Header -->
+          <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
+            <div>
+              <p class="text-xs font-semibold text-navy-700 tracking-wide mb-1.5">Metro Cebu Court Directory</p>
+              <h2 class="font-display text-3xl sm:text-4xl font-bold text-navy-900 tracking-tight text-balance">
+                Where to Play Pickleball in Cebu
+              </h2>
+              <p class="mt-2 text-slate-600 text-base max-w-2xl">
+                Compare verified court counts, hourly rates, operating schedules, and open-play availability across Mandaue City, Banilad, Cebu City, and Lapu-Lapu.
+              </p>
+            </div>
+
+            <div class="text-sm text-slate-600 tabular-nums shrink-0">
+              Showing <span id="court-count-label" class="font-semibold text-navy-900">9</span> of 9 facilities
+            </div>
+          </div>
+
+          <!-- Venue Visual Spotlights (2 Featured Cebu Court Environments) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+            <div class="relative rounded-xl overflow-hidden bg-navy-900 border border-slate-200 h-56 sm:h-64">
+              <div class="absolute inset-0 bg-navy-900 flex items-center justify-center text-slate-400 text-sm">
+                24/7 Indoor Climate-Controlled Arena
+              </div>
+              <img
+                src="/src/assets/images/court_indoor_arena_1792925414532.jpg"
+                alt="24/7 indoor air-conditioned pickleball facility in Mandaue City with four navy courts"
+                referrerpolicy="no-referrer"
+                onerror="this.style.display='none'"
+                class="relative z-10 w-full h-full object-cover"
+              />
+              <div class="absolute inset-0 z-20 bg-gradient-to-t from-navy-950/90 via-navy-950/35 to-transparent p-5 flex flex-col justify-end">
+                <p class="text-xs text-pickle-400 font-medium">Climate-Controlled Play · Open 24/7</p>
+                <h3 class="font-display text-2xl font-bold text-white mt-0.5">Indoor Arenas Built for Midday Cebu Heat</h3>
+                <p class="text-xs sm:text-sm text-slate-200 mt-1">Zero wind drift, tournament LED lighting, and cushioned acrylic courts in Mandaue &amp; IT Park.</p>
+              </div>
+            </div>
+
+            <div class="relative rounded-xl overflow-hidden bg-navy-900 border border-slate-200 h-56 sm:h-64">
+              <div class="absolute inset-0 bg-navy-900 flex items-center justify-center text-slate-400 text-sm">
+                High-Canopy Covered Community Courts
+              </div>
+              <img
+                src="/src/assets/images/court_covered_tropical_1792925414904.jpg"
+                alt="Covered open-air pickleball center in Cebu with doubles rally at the kitchen line"
+                referrerpolicy="no-referrer"
+                onerror="this.style.display='none'"
+                class="relative z-10 w-full h-full object-cover"
+              />
+              <div class="absolute inset-0 z-20 bg-gradient-to-t from-navy-950/90 via-navy-950/35 to-transparent p-5 flex flex-col justify-end">
+                <p class="text-xs text-pickle-400 font-medium">Breezy Covered Hubs · Daily Open Play</p>
+                <h3 class="font-display text-2xl font-bold text-white mt-0.5">Paddle-Stacking Open Play Communities</h3>
+                <p class="text-xs sm:text-sm text-slate-200 mt-1">Drop in solo or with a partner—₱150 queue sessions run daily across Centro, Subangdaku, and Banilad.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Filter & Search Toolbar -->
+          <div class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 mb-8">
+            <div class="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
+              <!-- Interactive Filter Buttons (Functional Segmented Controls) -->
+              <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter courts by feature or city">
+                <button
+                  type="button"
+                  data-filter="all"
+                  class="court-filter-btn px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-navy-900 text-pickle-400 transition-colors duration-150 whitespace-nowrap shrink-0"
+                >
+                  All Courts (9)
+                </button>
+                <button
+                  type="button"
+                  data-filter="Mandaue"
+                  class="court-filter-btn px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors duration-150 whitespace-nowrap shrink-0"
+                >
+                  Mandaue City
+                </button>
+                <button
+                  type="button"
+                  data-filter="Cebu City"
+                  class="court-filter-btn px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors duration-150 whitespace-nowrap shrink-0"
+                >
+                  Banilad &amp; Cebu City
+                </button>
+                <button
+                  type="button"
+                  data-filter="Indoor"
+                  class="court-filter-btn px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors duration-150 whitespace-nowrap shrink-0"
+                >
+                  Indoor AC
+                </button>
+                <button
+                  type="button"
+                  data-filter="24/7"
+                  class="court-filter-btn px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors duration-150 whitespace-nowrap shrink-0"
+                >
+                  Open 24/7
+                </button>
+                <button
+                  type="button"
+                  data-filter="Budget"
+                  class="court-filter-btn px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors duration-150 whitespace-nowrap shrink-0"
+                >
+                  Under ₱450/hr
+                </button>
+              </div>
+
+              <!-- Search + Sort -->
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <div class="relative flex-1 sm:w-64">
+                  <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <input
+                    id="court-search"
+                    type="search"
+                    placeholder="Search court or street..."
+                    aria-label="Search courts by name or location"
+                    class="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg text-navy-900 placeholder:text-slate-400 focus:bg-white focus:border-navy-700 focus:outline-none"
+                  />
+                </div>
+
+                <select
+                  id="court-sort"
+                  aria-label="Sort courts"
+                  class="px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg text-navy-900 font-medium focus:bg-white focus:border-navy-700 focus:outline-none"
+                >
+                  <option value="featured">Sort: Featured</option>
+                  <option value="price-asc">Rate: Lowest First</option>
+                  <option value="courts-desc">Most Courts First</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Court Cards Grid (Populated & Filtered cleanly via Vanilla JS, with Static HTML Initial Render for SEO/Zero-Latency) -->
+          <div id="courts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- JS renders the 9 comprehensive Cebu courts immediately on parse -->
+          </div>
+
+          <!-- Empty Filter State -->
+          <div id="courts-empty" class="hidden bg-white rounded-xl border border-slate-200 p-12 text-center">
+            <p class="font-display text-2xl font-bold text-navy-900">No Cebu courts match that filter</p>
+            <p class="text-sm text-slate-600 mt-1">Try clearing your search term or switching back to all Metro Cebu venues.</p>
+            <button
+              id="reset-filters-btn"
+              type="button"
+              class="mt-5 inline-flex items-center justify-center px-4 py-2 text-sm font-semibold bg-navy-900 text-pickle-400 rounded-lg hover:bg-navy-800 transition-colors"
+            >
+              Reset All Filters
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. PRICING & RENTAL REFERENCE TABLE + DOUBLES SPLIT CALCULATOR -->
+      <section id="pricing" class="py-16 lg:py-20 bg-white border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="max-w-2xl mb-10">
+            <p class="text-xs font-semibold text-navy-700 tracking-wide mb-1.5">Metro Cebu Rate Guide</p>
+            <h2 class="font-display text-3xl sm:text-4xl font-bold text-navy-900 tracking-tight text-balance">
+              Pricing, Gear Rentals &amp; Open Play Fees
+            </h2>
+            <p class="mt-2 text-slate-600 text-base">
+              Standard reference rates across Mandaue, Banilad, and Cebu City pickleball clubs. No membership required at public booking venues.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Pricing Reference Table (8 Columns) -->
+            <div class="lg:col-span-8 overflow-x-auto rounded-xl border border-slate-200 bg-white">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-navy-900 text-white border-b border-navy-800">
+                    <th scope="col" class="py-4 px-5 text-xs font-semibold tracking-wide">Service / Session Type</th>
+                    <th scope="col" class="py-4 px-5 text-xs font-semibold tracking-wide">Standard Cebu Rate</th>
+                    <th scope="col" class="py-4 px-5 text-xs font-semibold tracking-wide hidden sm:table-cell">Format &amp; Inclusions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-sm">
+                  <tr class="hover:bg-slate-50/80 transition-colors">
+                    <td class="py-4 px-5 align-top">
+                      <p class="font-semibold text-navy-900">Standard Court Rates</p>
+                      <p class="text-xs text-slate-500 mt-0.5 sm:hidden">Private hourly reservation (up to 6–8 players)</p>
+                    </td>
+                    <td class="py-4 px-5 align-top whitespace-nowrap font-mono font-semibold text-navy-900 tabular-nums">
+                      ₱350 – ₱750 / hour
+                    </td>
+                    <td class="py-4 px-5 align-top text-slate-600 hidden sm:table-cell">
+                      ₱300–₱450/hr for covered/outdoor courts; ₱500–₱750/hr for night floodlights or 24/7 indoor AC arenas.
+                    </td>
+                  </tr>
+
+                  <tr class="hover:bg-slate-50/80 transition-colors">
+                    <td class="py-4 px-5 align-top">
+                      <p class="font-semibold text-navy-900">Paddle Rentals</p>
+                      <p class="text-xs text-slate-500 mt-0.5 sm:hidden">Per session at front desk</p>
+                    </td>
+                    <td class="py-4 px-5 align-top whitespace-nowrap font-mono font-semibold text-navy-900 tabular-nums">
+                      ₱50 per session
+                    </td>
+                    <td class="py-4 px-5 align-top text-slate-600 hidden sm:table-cell">
+                      Composite &amp; carbon-surface loaner paddles available on-site. Practice balls typically provided free with court booking.
+                    </td>
+                  </tr>
+
+                  <tr class="hover:bg-slate-50/80 transition-colors">
+                    <td class="py-4 px-5 align-top">
+                      <p class="font-semibold text-navy-900">Daily Open Play Entry</p>
+                      <p class="text-xs text-slate-500 mt-0.5 sm:hidden">Drop-in queue format</p>
+                    </td>
+                    <td class="py-4 px-5 align-top whitespace-nowrap font-mono font-semibold text-navy-900 tabular-nums">
+                      ₱150 per player
+                    </td>
+                    <td class="py-4 px-5 align-top text-slate-600 hidden sm:table-cell">
+                      Drop-in queue format (3–4 hour window). Stack your paddle at court-side racks, play games to 11, and rotate partners.
+                    </td>
+                  </tr>
+
+                  <tr class="hover:bg-slate-50/80 transition-colors">
+                    <td class="py-4 px-5 align-top">
+                      <p class="font-semibold text-navy-900">Beginner Coaching Clinics</p>
+                      <p class="text-xs text-slate-500 mt-0.5 sm:hidden">Certified Cebu club coaches</p>
+                    </td>
+                    <td class="py-4 px-5 align-top whitespace-nowrap font-mono font-semibold text-navy-900 tabular-nums">
+                      ₱600 / hour
+                    </td>
+                    <td class="py-4 px-5 align-top text-slate-600 hidden sm:table-cell">
+                      Covers grip, underhand serve, two-bounce timing, kitchen dinking, and live Zero-Zero-Two game scoring.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Interactive Barkada / Doubles Cost Estimator (4 Columns) -->
+            <div class="lg:col-span-4 bg-navy-900 text-white rounded-xl p-6 border border-navy-800">
+              <p class="text-xs font-medium text-pickle-400">Quick Session Split Calculator</p>
+              <h3 class="font-display text-2xl font-bold mt-1">Ambagan / Player Split</h3>
+              <p class="text-xs text-slate-300 mt-1">
+                Estimate how much each player chips in for a private court booking plus loaner paddles.
+              </p>
+
+              <div class="mt-5 space-y-4 text-sm">
+                <div>
+                  <label for="calc-rate" class="block text-xs font-medium text-slate-300 mb-1">Court Tier</label>
+                  <select
+                    id="calc-rate"
+                    class="w-full px-3 py-2 rounded-lg bg-navy-800 border border-white/15 text-white text-sm focus:border-pickle-400 focus:outline-none"
+                  >
+                    <option value="350">Covered Daytime / Standard (₱350/hr)</option>
+                    <option value="400" selected>Mid-Range Covered Hub (₱400/hr)</option>
+                    <option value="450">IT Park / Prime Covered (₱450/hr)</option>
+                    <option value="500">Night Floodlit Session (₱500/hr)</option>
+                    <option value="750">24/7 Indoor Air-Conditioned (₱750/hr)</option>
+                  </select>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                  <div>
+                    <label for="calc-hours" class="block text-xs font-medium text-slate-300 mb-1">Hours</label>
+                    <input
+                      id="calc-hours"
+                      type="number"
+                      min="1"
+                      max="6"
+                      value="2"
+                      class="w-full px-3 py-2 rounded-lg bg-navy-800 border border-white/15 text-white font-mono tabular-nums text-sm focus:border-pickle-400 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label for="calc-players" class="block text-xs font-medium text-slate-300 mb-1">Players</label>
+                    <input
+                      id="calc-players"
+                      type="number"
+                      min="2"
+                      max="12"
+                      value="4"
+                      class="w-full px-3 py-2 rounded-lg bg-navy-800 border border-white/15 text-white font-mono tabular-nums text-sm focus:border-pickle-400 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label for="calc-paddles" class="block text-xs font-medium text-slate-300 mb-1">Paddles (₱50)</label>
+                    <input
+                      id="calc-paddles"
+                      type="number"
+                      min="0"
+                      max="12"
+                      value="2"
+                      class="w-full px-3 py-2 rounded-lg bg-navy-800 border border-white/15 text-white font-mono tabular-nums text-sm focus:border-pickle-400 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-white/10 flex items-baseline justify-between">
+                  <div>
+                    <p class="text-xs text-slate-400">Estimated Per Player</p>
+                    <p id="calc-per-player" class="font-display text-3xl font-bold text-pickle-400 tabular-nums mt-0.5">
+                      ₱225
+                    </p>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-xs text-slate-400">Total Session</p>
+                    <p id="calc-total" class="font-mono text-base font-semibold text-white tabular-nums mt-0.5">
+                      ₱900
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. INTERACTIVE GOOGLE MAP SECTION -->
+      <section id="map" class="py-16 lg:py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+            <div>
+              <p class="text-xs font-semibold text-navy-700 tracking-wide mb-1.5">Geolocation &amp; Directions</p>
+              <h2 class="font-display text-3xl sm:text-4xl font-bold text-navy-900 tracking-tight text-balance">
+                Court Locations Across Metro Cebu
+              </h2>
+              <p class="mt-2 text-slate-600 text-base">
+                Find a court near you in Mandaue, Banilad, or Cebu City.
+              </p>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0">
+              <span id="map-active-label" class="text-xs sm:text-sm font-medium text-slate-600">
+                Centered: Metro Cebu Hub (10.338, 123.931)
+              </span>
+              <button
+                id="reset-map-btn"
+                type="button"
+                class="px-3 py-1.5 text-xs font-semibold bg-white border border-slate-300 text-navy-900 rounded-lg hover:bg-slate-100 transition-colors whitespace-nowrap shrink-0"
+              >
+                Reset Center
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Jump Location Selector Bar -->
+          <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-4" role="region" aria-label="Jump to court on map">
+            <button
+              type="button"
+              data-lat="10.338"
+              data-lng="123.931"
+              data-zoom="13"
+              data-label="Metro Cebu Hub (10.338, 123.931)"
+              class="map-pin-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-navy-900 text-pickle-400 whitespace-nowrap shrink-0 transition-colors"
+            >
+              All Metro Cebu (10.338, 123.931)
+            </button>
+            <button
+              type="button"
+              data-lat="10.3388"
+              data-lng="123.9242"
+              data-zoom="16"
+              data-label="State of Mind · Hernan Cortes St., Mandaue"
+              class="map-pin-btn px-3 py-1.5 text-xs font-medium rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-navy-700 whitespace-nowrap shrink-0 transition-colors"
+            >
+              State of Mind (Hernan Cortes)
+            </button>
+            <button
+              type="button"
+              data-lat="10.3264"
+              data-lng="123.9421"
+              data-zoom="16"
+              data-label="The Pickle Point Cebu · Centro, Mandaue"
+              class="map-pin-btn px-3 py-1.5 text-xs font-medium rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-navy-700 whitespace-nowrap shrink-0 transition-colors"
+            >
+              The Pickle Point (Centro)
+            </button>
+            <button
+              type="button"
+              data-lat="10.3415"
+              data-lng="123.9318"
+              data-zoom="16"
+              data-label="Kitchenline Pickleball Center · Mandaue City"
+              class="map-pin-btn px-3 py-1.5 text-xs font-medium rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-navy-700 whitespace-nowrap shrink-0 transition-colors"
+            >
+              Kitchenline (Mandaue)
+            </button>
+            <button
+              type="button"
+              data-lat="10.3238"
+              data-lng="123.9285"
+              data-zoom="16"
+              data-label="SweetSpot Pickleball · HVG IT Park, Mandaue"
+              class="map-pin-btn px-3 py-1.5 text-xs font-medium rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-navy-700 whitespace-nowrap shrink-0 transition-colors"
+            >
+              SweetSpot (HVG IT Park)
+            </button>
+            <button
+              type="button"
+              data-lat="10.3422"
+              data-lng="123.9135"
+              data-zoom="16"
+              data-label="Game Changer Sports Facility · Banilad"
+              class="map-pin-btn px-3 py-1.5 text-xs font-medium rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-navy-700 whitespace-nowrap shrink-0 transition-colors"
+            >
+              Game Changer (Banilad)
+            </button>
+          </div>
+
+          <!-- Required 100% Width x 400px Height Google Maps Embed Container -->
+          <div class="w-full h-[400px] rounded-xl overflow-hidden border border-slate-200 bg-slate-200">
+            <iframe
+              id="cebu-google-map"
+              title="Interactive Google Map of Pickleball Courts in Mandaue City and Cebu City"
+              src="https://maps.google.com/maps?q=10.338,123.931&hl=en&z=13&output=embed"
+              width="100%"
+              height="400"
+              style="border: 0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              class="w-full h-[400px]"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. QUICK RULES SECTION -->
+      <section id="rules" class="py-16 lg:py-20 bg-navy-900 text-white court-surface-grid border-t border-navy-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center mb-12">
+            <div class="lg:col-span-7">
+              <p class="text-xs font-semibold text-pickle-400 tracking-wide mb-1.5">First Time on Court?</p>
+              <h2 class="font-display text-3xl sm:text-4xl font-bold text-white tracking-tight text-balance">
+                Quick Pickleball Rules Before You Call “Zero-Zero-Two!”
+              </h2>
+              <p class="mt-3 text-slate-300 text-base max-w-2xl">
+                Pickleball takes five minutes to learn and a lifetime to master. Know these three core fundamentals before stepping into any Cebu open-play queue.
+              </p>
+            </div>
+
+            <!-- Clean Architectural SVG Pickleball Court Diagram -->
+            <div class="lg:col-span-5">
+              <div class="bg-navy-800/90 border border-white/15 rounded-xl p-4 sm:p-5">
+                <div class="flex items-center justify-between text-xs text-slate-300 mb-2.5">
+                  <span>Standard 20ft × 44ft Court Layout</span>
+                  <span class="text-pickle-400 font-medium">7ft Kitchen Highlighted</span>
+                </div>
+                <svg viewBox="0 0 440 210" class="w-full h-auto rounded-lg" role="img" aria-label="Pickleball court diagram highlighting the 7-foot Non-Volley Kitchen Zone on both sides of the net">
+                  <!-- Outer Apron -->
+                  <rect x="0" y="0" width="440" height="210" fill="#07111F" />
+                  <!-- Left & Right Service Courts -->
+                  <rect x="20" y="15" width="400" height="180" fill="#1B365C" stroke="#FFFFFF" stroke-width="2.5" />
+                  <!-- Non-Volley Zone (Kitchen) Highlight -->
+                  <rect x="156" y="15" width="128" height="180" fill="#C8F135" fill-opacity="0.22" stroke="#FFFFFF" stroke-width="2" />
+                  <!-- Centerlines -->
+                  <line x1="20" y1="105" x2="156" y2="105" stroke="#FFFFFF" stroke-width="2" />
+                  <line x1="284" y1="105" x2="420" y2="105" stroke="#FFFFFF" stroke-width="2" />
+                  <!-- Net Line -->
+                  <line x1="220" y1="8" x2="220" y2="202" stroke="#C8F135" stroke-width="4" stroke-dasharray="6 3" />
+                  <!-- Labels -->
+                  <text x="88" y="65" fill="#E2E8F0" font-size="11" font-family="Plus Jakarta Sans, sans-serif" text-anchor="middle">Even Court</text>
+                  <text x="88" y="152" fill="#E2E8F0" font-size="11" font-family="Plus Jakarta Sans, sans-serif" text-anchor="middle">Odd Court</text>
+                  <text x="352" y="65" fill="#E2E8F0" font-size="11" font-family="Plus Jakarta Sans, sans-serif" text-anchor="middle">Odd Court</text>
+                  <text x="352" y="152" fill="#E2E8F0" font-size="11" font-family="Plus Jakarta Sans, sans-serif" text-anchor="middle">Even Court</text>
+                  <text x="188" y="109" fill="#C8F135" font-size="10" font-weight="700" font-family="Plus Jakarta Sans, sans-serif" text-anchor="middle">KITCHEN</text>
+                  <text x="252" y="109" fill="#C8F135" font-size="10" font-weight="700" font-family="Plus Jakarta Sans, sans-serif" text-anchor="middle">KITCHEN</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3 Core Rule Cards (Human Editorial Numbering, Single-Elevation Depth, Zero Thick Left Accent Bars) -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Rule 1 -->
+            <article class="bg-navy-800/90 border border-white/15 rounded-xl p-6 flex flex-col justify-between">
+              <div>
+                <p class="font-mono text-xs text-pickle-400 font-semibold">01. Non-Volley Zone</p>
+                <h3 class="font-display text-2xl font-bold text-white mt-2">
+                  The Kitchen / Non-Volley Zone
+                </h3>
+                <p class="mt-3 text-sm text-slate-300 leading-relaxed">
+                  The 7-foot zone on each side of the net is called <strong class="text-white font-semibold">The Kitchen</strong>. Players cannot hit the ball out of the air (volley) while any part of their foot touches the kitchen line or inside the zone—even if momentum carries them in after the shot.
+                </p>
+              </div>
+              <p class="mt-5 pt-4 border-t border-white/10 text-xs text-slate-400">
+                Tip: You may step inside the Kitchen anytime to hit a ball that has already bounced!
+              </p>
+            </article>
+
+            <!-- Rule 2 -->
+            <article class="bg-navy-800/90 border border-white/15 rounded-xl p-6 flex flex-col justify-between">
+              <div>
+                <p class="font-mono text-xs text-pickle-400 font-semibold">02. Serve &amp; Two-Bounce Rule</p>
+                <h3 class="font-display text-2xl font-bold text-white mt-2">
+                  Serving Rules
+                </h3>
+                <p class="mt-3 text-sm text-slate-300 leading-relaxed">
+                  Serves must be hit <strong class="text-white font-semibold">underhand</strong> below waist level (or via legal drop serve) diagonally crosscourt past the kitchen line. Under the <strong class="text-white font-semibold">Two-Bounce Rule</strong>, the receiving team must let the serve bounce, and the serving team must also let the return bounce before anyone can volley.
+                </p>
+              </div>
+              <p class="mt-5 pt-4 border-t border-white/10 text-xs text-slate-400">
+                Tip: Only one serve attempt is allowed per server—a serve clipping the net that lands past the kitchen is live!
+              </p>
+            </article>
+
+            <!-- Rule 3 -->
+            <article class="bg-navy-800/90 border border-white/15 rounded-xl p-6 flex flex-col justify-between">
+              <div>
+                <p class="font-mono text-xs text-pickle-400 font-semibold">03. Why “Zero Zero Two”?</p>
+                <h3 class="font-display text-2xl font-bold text-white mt-2">
+                  Scoring to 11
+                </h3>
+                <p class="mt-3 text-sm text-slate-300 leading-relaxed">
+                  Points are scored <strong class="text-white font-semibold">only by the serving team</strong>. Standard open-play games go to <strong class="text-white font-semibold">11 points, win by 2</strong>. In doubles, three numbers are called before every serve: Serving Score, Receiving Score, and Server Number (1 or 2). Every game starts at <strong class="text-pickle-400 font-semibold">0–0–2</strong> so the opening team gets only one fault before side-out.
+                </p>
+              </div>
+              <p class="mt-5 pt-4 border-t border-white/10 text-xs text-slate-400">
+                Tip: Even score (0, 2, 4...) serves from the right side; odd score serves from the left.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- COMMUNITY COURT UPDATE / GROUP BOOKING INQUIRY SECTION -->
+      <section class="py-16 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            <div class="lg:col-span-5">
+              <p class="text-xs font-semibold text-navy-700 tracking-wide mb-1.5">Cebu Pickleball Community</p>
+              <h2 class="font-display text-3xl sm:text-4xl font-bold text-navy-900 tracking-tight text-balance">
+                Submit a Court Update or Group Clinic Inquiry
+              </h2>
+              <p class="mt-3 text-slate-600 text-sm sm:text-base leading-relaxed">
+                Know a newly opened court in Mandaue, Talisay, or Lapu-Lapu? Organizing a corporate pickleball mixer or beginner clinic? Send our Cebu directory team a note and we will respond within 24 hours.
+              </p>
+
+              <dl class="mt-6 space-y-3 text-sm border-t border-slate-200 pt-6">
+                <div class="flex items-baseline justify-between gap-4">
+                  <dt class="text-slate-500">Phone / Viber</dt>
+                  <dd class="font-mono font-semibold text-navy-900 tabular-nums">
+                    <a href="tel:09171234567" class="hover:underline">0917-123-4567</a>
+                  </dd>
+                </div>
+                <div class="flex items-baseline justify-between gap-4">
+                  <dt class="text-slate-500">Support Email</dt>
+                  <dd class="font-medium text-navy-900">
+                    <a href="mailto:support@zerozerotwocebu.ph" class="hover:underline">support@zerozerotwocebu.ph</a>
+                  </dd>
+                </div>
+                <div class="flex items-baseline justify-between gap-4">
+                  <dt class="text-slate-500">Coverage Area</dt>
+                  <dd class="font-medium text-navy-900">Metro Cebu, Philippines</dd>
+                </div>
+              </dl>
+            </div>
+
+            <div class="lg:col-span-7">
+              <form id="inquiry-form" novalidate class="bg-slate-50 border border-slate-200 rounded-xl p-6 sm:p-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label for="inq-name" class="block text-xs font-semibold text-navy-900 mb-1.5">Full Name *</label>
+                    <input
+                      id="inq-name"
+                      name="name"
+                      type="text"
+                      required
+                      placeholder="e.g. Marco Villareal"
+                      class="w-full px-3.5 py-2.5 text-sm bg-white border border-slate-300 rounded-lg text-navy-900 placeholder:text-slate-400 focus:border-navy-900 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label for="inq-contact" class="block text-xs font-semibold text-navy-900 mb-1.5">Email or Mobile (09XX) *</label>
+                    <input
+                      id="inq-contact"
+                      name="contact"
+                      type="text"
+                      required
+                      placeholder="0917-XXX-XXXX or email@domain.ph"
+                      class="w-full px-3.5 py-2.5 text-sm bg-white border border-slate-300 rounded-lg text-navy-900 placeholder:text-slate-400 focus:border-navy-900 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <label for="inq-topic" class="block text-xs font-semibold text-navy-900 mb-1.5">Topic</label>
+                  <select
+                    id="inq-topic"
+                    name="topic"
+                    class="w-full px-3.5 py-2.5 text-sm bg-white border border-slate-300 rounded-lg text-navy-900 focus:border-navy-900 focus:outline-none"
+                  >
+                    <option value="Beginner Coaching Clinic (₱600/hr)">Beginner Coaching Clinic Booking (₱600/hr)</option>
+                    <option value="Open Play Schedule Question">Open Play Queue &amp; Drop-In Schedule Inquiry</option>
+                    <option value="Submit New Cebu Court / Rate Update">Submit a New Cebu Court or Rate Update</option>
+                    <option value="Corporate / Barkada Tournament">Corporate or Barkada Mini-Tournament</option>
+                  </select>
+                </div>
+
+                <div class="mt-4">
+                  <label for="inq-message" class="block text-xs font-semibold text-navy-900 mb-1.5">Details *</label>
+                  <textarea
+                    id="inq-message"
+                    name="message"
+                    rows="3"
+                    required
+                    placeholder="Share your preferred Cebu court area, date/time, or court listing update..."
+                    class="w-full px-3.5 py-2.5 text-sm bg-white border border-slate-300 rounded-lg text-navy-900 placeholder:text-slate-400 focus:border-navy-900 focus:outline-none"
+                  ></textarea>
+                </div>
+
+                <p id="form-error" class="hidden mt-3 text-xs font-medium text-red-600" role="alert"></p>
+                <div id="form-success" class="hidden mt-4 p-4 rounded-lg bg-navy-900 text-white text-sm" role="status">
+                  <p class="font-semibold text-pickle-400">Daghang salamat! Inquiry recorded.</p>
+                  <p class="text-xs text-slate-300 mt-1">
+                    Our Metro Cebu coordinator will reach out via your provided contact details shortly. For urgent court availability, call <span class="font-mono">0917-123-4567</span>.
+                  </p>
+                </div>
+
+                <div class="mt-5 flex items-center justify-between gap-4">
+                  <span class="text-xs text-slate-500">All fields marked * are required.</span>
+                  <button
+                    type="submit"
+                    class="px-5 py-2.5 text-sm font-semibold bg-navy-900 text-pickle-400 rounded-lg hover:bg-navy-800 transition-colors whitespace-nowrap shrink-0"
+                  >
+                    Send Inquiry
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 7. CONTACT & SUPPORT FOOTER -->
+    <footer id="contact" class="bg-navy-950 text-slate-300 border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-14">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-10 border-b border-white/10">
+          <!-- Brand Info -->
+          <div class="md:col-span-5">
+            <a href="#home" class="font-display text-2xl font-bold text-white tracking-tight">
+              Zero Zero Two Cebu
+            </a>
+            <p class="text-sm text-pickle-400 font-medium mt-1">
+              Unsay Score? Court Finder Ni!
+            </p>
+            <p class="text-sm text-slate-400 mt-3 max-w-sm leading-relaxed">
+              Your independent community guide to pickleball courts, hourly rates, paddle rentals, and daily open-play queues across Metro Cebu.
+            </p>
+          </div>
+
+          <!-- Quick Links Mirror -->
+          <div class="md:col-span-3">
+            <h3 class="text-xs font-semibold text-white tracking-wide mb-3">Quick Navigation</h3>
+            <ul class="space-y-2 text-sm text-slate-400">
+              <li><a href="#home" class="hover:text-pickle-400 transition-colors">Home</a></li>
+              <li><a href="#courts" class="hover:text-pickle-400 transition-colors">Find Courts</a></li>
+              <li><a href="#pricing" class="hover:text-pickle-400 transition-colors">Rates &amp; Rentals</a></li>
+              <li><a href="#map" class="hover:text-pickle-400 transition-colors">Interactive Map</a></li>
+              <li><a href="#rules" class="hover:text-pickle-400 transition-colors">Quick Rules</a></li>
+            </ul>
+          </div>
+
+          <!-- Contact & Support Details (Exact Required Information) -->
+          <div class="md:col-span-4">
+            <h3 class="text-xs font-semibold text-white tracking-wide mb-3">Contact &amp; Support</h3>
+            <ul class="space-y-2.5 text-sm">
+              <li class="flex items-baseline justify-between sm:justify-start sm:gap-3">
+                <span class="text-slate-400">Contact Number:</span>
+                <a href="tel:09171234567" class="font-mono text-white hover:text-pickle-400 tabular-nums transition-colors">
+                  0917-123-4567
+                </a>
+              </li>
+              <li class="flex items-baseline justify-between sm:justify-start sm:gap-3">
+                <span class="text-slate-400">Email:</span>
+                <a href="mailto:support@zerozerotwocebu.ph" class="text-white hover:text-pickle-400 transition-colors">
+                  support@zerozerotwocebu.ph
+                </a>
+              </li>
+              <li class="flex items-baseline justify-between sm:justify-start sm:gap-3">
+                <span class="text-slate-400">Address:</span>
+                <span class="text-white">Metro Cebu, Philippines</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <p>&copy; 2026 Zero Zero Two Cebu. Community Pickleball Court Directory.</p>
+          <p>Rates &amp; schedules subject to club holiday updates · Call ahead for peak evening slots.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ACCESSIBLE COURT DETAILS MODAL -->
+    <div
+      id="court-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-court-name"
+      class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-navy-950/75 backdrop-blur-sm"
+    >
+      <div class="bg-white rounded-xl border border-slate-200 max-w-lg w-full overflow-hidden shadow-xl">
+        <div class="bg-navy-900 text-white px-6 py-5 flex items-start justify-between gap-4">
+          <div>
+            <p id="modal-court-area" class="text-xs font-medium text-pickle-400"></p>
+            <h3 id="modal-court-name" class="font-display text-2xl sm:text-3xl font-bold mt-0.5"></h3>
+          </div>
+          <button
+            id="close-modal-btn"
+            type="button"
+            aria-label="Close court details"
+            class="w-9 h-9 rounded-lg inline-flex items-center justify-center text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="p-6 space-y-4 text-sm text-slate-700">
+          <p id="modal-court-desc" class="leading-relaxed text-slate-600"></p>
+
+          <dl class="grid grid-cols-2 gap-4 pt-3 border-t border-slate-200">
+            <div>
+              <dt class="text-xs text-slate-500">Location</dt>
+              <dd id="modal-court-address" class="font-semibold text-navy-900 mt-0.5"></dd>
+            </div>
+            <div>
+              <dt class="text-xs text-slate-500">Courts &amp; Surface</dt>
+              <dd id="modal-court-count" class="font-semibold text-navy-900 mt-0.5 tabular-nums"></dd>
+            </div>
+            <div>
+              <dt class="text-xs text-slate-500">Hourly Rate</dt>
+              <dd id="modal-court-rate" class="font-mono font-semibold text-navy-900 mt-0.5 tabular-nums"></dd>
+            </div>
+            <div>
+              <dt class="text-xs text-slate-500">Operating Hours</dt>
+              <dd id="modal-court-hours" class="font-semibold text-navy-900 mt-0.5 tabular-nums"></dd>
+            </div>
+          </dl>
+
+          <div class="pt-3 border-t border-slate-200">
+            <p class="text-xs text-slate-500 mb-1">Open Play &amp; Amenities</p>
+            <p id="modal-court-amenities" class="text-xs sm:text-sm font-medium text-navy-900"></p>
+          </div>
+
+          <div class="pt-4 flex flex-wrap items-center justify-end gap-3">
+            <button
+              id="modal-map-jump-btn"
+              type="button"
+              class="px-4 py-2.5 text-xs sm:text-sm font-semibold bg-pickle-400 text-navy-950 rounded-lg hover:bg-pickle-300 transition-colors whitespace-nowrap"
+            >
+              Locate on Cebu Map
+            </button>
+            <button
+              id="modal-close-secondary"
+              type="button"
+              class="px-4 py-2.5 text-xs sm:text-sm font-medium bg-slate-100 text-navy-900 rounded-lg hover:bg-slate-200 transition-colors whitespace-nowrap"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOATING PICKLEBOT AI CHATBOT WIDGET (BOTTOM-RIGHT) -->
+    <div id="picklebot-root">
+      <!-- Chat Modal Window Overlaying Bottom-Right -->
+      <section
+        id="picklebot-window"
+        role="dialog"
+        aria-modal="false"
+        aria-labelledby="picklebot-title"
+        class="fixed bottom-20 right-4 sm:right-5 z-50 hidden flex-col w-[calc(100vw-2rem)] sm:w-[400px] h-[min(540px,calc(100vh-7.5rem))] bg-white rounded-xl border border-slate-200 shadow-2xl overflow-hidden"
+      >
+        <!-- Modal Header -->
+        <div class="bg-navy-900 text-white px-4 py-3.5 border-b border-navy-800 flex items-center justify-between gap-3 shrink-0">
+          <div class="min-w-0">
+            <h2 id="picklebot-title" class="font-display text-xl font-bold tracking-tight text-white leading-tight">
+              PickleBot AI
+            </h2>
+            <p class="text-xs text-pickle-400 font-medium truncate mt-0.5">
+              Unsay Score? Court Finder Assistant
+            </p>
+          </div>
+          <button
+            id="picklebot-close-btn"
+            type="button"
+            aria-label="Close PickleBot AI chat"
+            class="w-9 h-9 rounded-lg inline-flex items-center justify-center text-slate-300 hover:text-white hover:bg-white/10 transition-colors shrink-0 font-semibold text-base"
+          >
+            ✕
+          </button>
+        </div>
+
+        <!-- Scrollable Chat History Area -->
+        <div
+          id="picklebot-messages"
+          aria-live="polite"
+          class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50 text-sm"
+        >
+          <!-- Pre-populated Initial Greeting Message -->
+          <div class="flex flex-col items-start">
+            <span class="text-[11px] font-semibold text-navy-700 mb-1 px-1">PickleBot</span>
+            <div class="max-w-[88%] rounded-xl rounded-tl-sm bg-navy-900 text-white px-3.5 py-2.5 text-sm leading-relaxed shadow-sm">
+              Maayong adlaw! I am PickleBot. Ask me anything about pickleball courts, pricing, equipment rentals, or rules across Metro Cebu!
+            </div>
+          </div>
+
+          <!-- Helpful Starter Prompts -->
+          <div id="picklebot-starters" class="pt-1 flex flex-wrap gap-1.5">
+            <button
+              type="button"
+              data-prompt="How much for 2 hours at SRP Seaside at night with 3 paddle rentals?"
+              class="picklebot-starter-btn text-left text-xs px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-navy-900 hover:border-navy-700 hover:bg-slate-100 transition-colors"
+            >
+              2 hrs SRP Night + 3 paddles?
+            </button>
+            <button
+              type="button"
+              data-prompt="Which air-conditioned indoor courts are open 24/7 in Metro Cebu?"
+              class="picklebot-starter-btn text-left text-xs px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-navy-900 hover:border-navy-700 hover:bg-slate-100 transition-colors"
+            >
+              24/7 indoor AC courts?
+            </button>
+            <button
+              type="button"
+              data-prompt="Where is the closest pickleball court if I am near Lahug or IT Park?"
+              class="picklebot-starter-btn text-left text-xs px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-navy-900 hover:border-navy-700 hover:bg-slate-100 transition-colors"
+            >
+              Courts near Lahug?
+            </button>
+          </div>
+        </div>
+
+        <!-- Typing Indicator ("PickleBot is thinking...") -->
+        <div
+          id="picklebot-typing"
+          class="hidden px-4 py-2 bg-slate-50 border-t border-slate-200/70 text-xs font-medium text-navy-700 shrink-0"
+          role="status"
+        >
+          <span class="inline-flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 animate-spin text-navy-900" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+              <path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
+            </svg>
+            <span>PickleBot is thinking...</span>
+          </span>
+        </div>
+
+        <!-- Input Bar -->
+        <form id="picklebot-form" class="bg-white border-t border-slate-200 p-3 flex items-center gap-2 shrink-0">
+          <label for="picklebot-input" class="sr-only">Ask PickleBot AI a question</label>
+          <input
+            id="picklebot-input"
+            type="text"
+            autocomplete="off"
+            placeholder="Ask about Cebu courts, rates, or rules..."
+            class="flex-1 min-w-0 px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-lg text-navy-900 placeholder:text-slate-400 focus:bg-white focus:border-navy-900 focus:outline-none"
+          />
+          <button
+            id="picklebot-send-btn"
+            type="submit"
+            class="px-4 py-2.5 text-sm font-semibold bg-pickle-400 text-navy-950 rounded-lg hover:bg-pickle-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150 whitespace-nowrap shrink-0"
+          >
+            Send
+          </button>
+        </form>
+      </section>
+
+      <!-- Fixed Floating Trigger Button -->
+      <button
+        id="picklebot-toggle-btn"
+        type="button"
+        aria-expanded="false"
+        aria-controls="picklebot-window"
+        class="fixed bottom-5 right-4 sm:right-5 z-40 inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold bg-pickle-400 text-navy-950 rounded-full shadow-lg border border-navy-900/15 hover:bg-pickle-300 active:scale-[0.98] transition-all duration-150 whitespace-nowrap"
+      >
+        💬 Ask PickleBot AI
+      </button>
+    </div>
+
+    <!-- CLIENT-SIDE DIRECTORY, FILTER, MAP, CALCULATOR & PICKLEBOT AI WIDGET SCRIPT -->
+    <script>
+      (function () {
+        // Comprehensive Metro Cebu Pickleball Courts Dataset (All 9 Partner Venues)
+        const CEBU_COURTS = [
+          {
+            id: 'state-of-mind',
+            name: 'State of Mind Pickleball Court',
+            address: 'Hernan Cortes St., Mandaue City',
+            cityGroup: 'Mandaue',
+            courtCount: 4,
+            courtLabel: '4 Indoor Courts',
+            environment: 'Indoor',
+            rateDisplay: '₱750/hr',
+            baseRate: 750,
+            hours: 'Open 24/7',
+            is247: true,
+            lat: 10.3388,
+            lng: 123.9242,
+            surface: 'Pro Cushioned Acrylic · Full AC',
+            openPlay: 'Daily 6:00 PM – 9:00 PM open play (₱150/player) · ₱50 paddle rental · Lounge & showers',
+            description:
+              'Metro Cebu’s premier 24-hour fully air-conditioned indoor pickleball arena along Hernan Cortes Street, featuring four tournament-spaced courts and zero weather interruptions.',
+          },
+          {
+            id: 'pickle-point',
+            name: 'The Pickle Point Cebu',
+            address: 'Centro, Mandaue City',
+            cityGroup: 'Mandaue',
+            courtCount: 2,
+            courtLabel: '2 Covered Courts',
+            environment: 'Covered',
+            rateDisplay: '₱350/hr Day / ₱500/hr Night',
+            baseRate: 350,
+            hours: '8 AM - 10 PM',
+            is247: false,
+            lat: 10.3264,
+            lng: 123.9421,
+            surface: 'Covered Hardcourt · LED Night Lighting',
+            openPlay: 'Daily 6:00 PM – 9:00 PM open play (₱150/player) · ₱50 loaner paddles · Intimate 2-court setup',
+            description:
+              'Accessible community favorite in Centro, Mandaue offering budget-friendly daytime rates (8 AM - 5 PM) and lively evening doubles play (5 PM - 10 PM).',
+          },
+          {
+            id: 'kitchenline',
+            name: 'Kitchenline Pickleball Center',
+            address: 'Mandaue City (Subangdaku / A.S. Fortuna Access)',
+            cityGroup: 'Mandaue',
+            courtCount: 6,
+            courtLabel: '6 Courts',
+            environment: 'Covered',
+            rateDisplay: '₱400/hr',
+            baseRate: 400,
+            hours: '7 AM - 10 PM',
+            is247: false,
+            lat: 10.3415,
+            lng: 123.9318,
+            surface: 'High-Canopy Covered Acrylic',
+            openPlay: 'Daily 6:00 PM – 9:00 PM ₱150 drop-in queue · ₱600/hr coaching clinics · Ample parking',
+            description:
+              'Six-court covered pickleball hub engineered for club mixers, structured skill-level queues, and fast court turnover during peak Mandaue evenings.',
+          },
+          {
+            id: 'sweetspot',
+            name: 'SweetSpot Pickleball Courts',
+            address: 'HVG IT Park, Subangdaku, Mandaue',
+            cityGroup: 'Mandaue',
+            courtCount: 5,
+            courtLabel: '5 Courts',
+            environment: 'Covered',
+            rateDisplay: '₱450/hr',
+            baseRate: 450,
+            hours: '8 AM - 8 PM',
+            is247: false,
+            lat: 10.3238,
+            lng: 123.9285,
+            surface: 'Covered Multi-Layer Acrylic',
+            openPlay: 'After-work open play · Paddle rentals (₱50) · Secure IT Park parking',
+            description:
+              'Tucked inside HVG IT Park in Mandaue, SweetSpot offers five breezy covered courts popular with corporate groups, daytime drillers, and after-office doubles.',
+          },
+          {
+            id: 'game-changer',
+            name: 'Game Changer Sports Facility',
+            address: 'Banilad (Mandaue / Cebu City Border)',
+            cityGroup: 'Cebu City',
+            courtCount: 7,
+            courtLabel: '7 Courts',
+            environment: 'Covered',
+            rateDisplay: '₱350/hr',
+            baseRate: 350,
+            hours: '6 AM - 10 PM',
+            is247: false,
+            lat: 10.3422,
+            lng: 123.9135,
+            surface: 'Spacious Covered Sports Deck',
+            openPlay: 'Daily 6:00 PM – 9:00 PM ₱150 open play · Beginner clinics (₱600/hr) available',
+            description:
+              'High-capacity seven-court facility straddling the Banilad corridor, making it one of the easiest meeting points for players coming from both Talamban, Lahug, and Mandaue.',
+          },
+          {
+            id: 'lahug-dink-club',
+            name: 'IT Park Dink & Volley Studio',
+            address: 'Salinas Dr. / Lahug, Cebu City',
+            cityGroup: 'Cebu City',
+            courtCount: 4,
+            courtLabel: '4 Indoor Courts',
+            environment: 'Indoor',
+            rateDisplay: '₱600/hr',
+            baseRate: 600,
+            hours: '6 AM - 11 PM',
+            is247: false,
+            lat: 10.3305,
+            lng: 123.9062,
+            surface: 'Indoor Cushioned Court · Climate Controlled',
+            openPlay: 'Daily 6:00 PM – 9:00 PM ₱150 open play · ₱50 paddle rentals · Locker rooms',
+            description:
+              'Climate-controlled four-court urban club minutes from Cebu IT Park, ideal for BPO teams, midday lunch rallies, and structured DUPR-grouped sessions.',
+          },
+          {
+            id: 'talamban-baseline',
+            name: 'Northgate Baseline Courts',
+            address: 'Talamban Rd., Cebu City',
+            cityGroup: 'Cebu City',
+            courtCount: 4,
+            courtLabel: '4 Covered Courts',
+            environment: 'Covered',
+            rateDisplay: '₱350/hr',
+            baseRate: 350,
+            hours: '6 AM - 10 PM',
+            is247: false,
+            lat: 10.3692,
+            lng: 123.9168,
+            surface: 'High-Roof Covered Hardcourt',
+            openPlay: 'Daily 6:00 PM – 9:00 PM open play queues · ₱600/hr intro coaching · Refreshment kiosk',
+            description:
+              'Serving northern Cebu City and Talamban neighborhoods with high-ventilation steel roofing, generous baseline run-off space, and approachable hourly rates.',
+          },
+          {
+            id: 'srp-coastal',
+            name: 'SRP Seaside Pickleball Deck',
+            address: 'South Road Properties (SRP), Cebu City',
+            cityGroup: 'Cebu City',
+            courtCount: 5,
+            courtLabel: '5 Covered Courts',
+            environment: 'Covered',
+            rateDisplay: '₱300/hr Day / ₱400/hr Night',
+            baseRate: 300,
+            hours: '5 AM - 10 PM',
+            is247: false,
+            lat: 10.2812,
+            lng: 123.8805,
+            surface: 'All-Weather Acrylic · Coastal Breeze',
+            openPlay: 'Daily 6:00 PM – 9:00 PM ₱150 open play · Sunrise 5 AM sessions · Free parking',
+            description:
+              'Convenient southern access hub for players from Pardo, Banawa, and Talisay featuring five floodlit covered courts and early-bird 5 AM morning sessions.',
+          },
+          {
+            id: 'mactan-pueblo',
+            name: 'Mactan Island Pickleball Hub',
+            address: 'Pueblo Verde, Basak, Lapu-Lapu City',
+            cityGroup: 'Lapu-Lapu',
+            courtCount: 4,
+            courtLabel: '4 Covered Courts',
+            environment: 'Covered',
+            rateDisplay: '₱400/hr',
+            baseRate: 400,
+            hours: '7 AM - 10 PM',
+            is247: false,
+            lat: 10.3035,
+            lng: 123.9608,
+            surface: 'Covered Tournament Acrylic',
+            openPlay: 'Daily 6:00 PM – 9:00 PM ₱150 open play queue · ₱50 paddle rental · Pro shop grip bar',
+            description:
+              'Lapu-Lapu City’s central pickleball gathering spot just across the bridge, welcoming Mactan locals and visiting players for nightly paddle-stacking matches.',
+          },
+        ];
+
+        // DOM Elements
+        const gridEl = document.getElementById('courts-grid');
+        const emptyEl = document.getElementById('courts-empty');
+        const countLabelEl = document.getElementById('court-count-label');
+        const searchInput = document.getElementById('court-search');
+        const sortSelect = document.getElementById('court-sort');
+        const filterBtns = document.querySelectorAll('.court-filter-btn');
+        const resetFiltersBtn = document.getElementById('reset-filters-btn');
+
+        let activeFilter = 'all';
+        let searchQuery = '';
+        let sortBy = 'featured';
+
+        function renderCourts() {
+          let filtered = CEBU_COURTS.filter(function (court) {
+            const matchesFilter =
+              activeFilter === 'all' ||
+              (activeFilter === 'Mandaue' && court.cityGroup === 'Mandaue') ||
+              (activeFilter === 'Cebu City' && court.cityGroup === 'Cebu City') ||
+              (activeFilter === 'Indoor' && court.environment === 'Indoor') ||
+              (activeFilter === '24/7' && court.is247) ||
+              (activeFilter === 'Budget' && court.baseRate < 450);
+
+            const q = searchQuery.trim().toLowerCase();
+            const matchesSearch =
+              !q ||
+              court.name.toLowerCase().includes(q) ||
+              court.address.toLowerCase().includes(q) ||
+              court.courtLabel.toLowerCase().includes(q) ||
+              court.openPlay.toLowerCase().includes(q);
+
+            return matchesFilter && matchesSearch;
+          });
+
+          if (sortBy === 'price-asc') {
+            filtered = filtered.slice().sort(function (a, b) {
+              return a.baseRate - b.baseRate;
+            });
+          } else if (sortBy === 'courts-desc') {
+            filtered = filtered.slice().sort(function (a, b) {
+              return b.courtCount - a.courtCount;
+            });
+          }
+
+          countLabelEl.textContent = String(filtered.length);
+
+          if (filtered.length === 0) {
+            gridEl.innerHTML = '';
+            emptyEl.classList.remove('hidden');
+            return;
+          }
+
+          emptyEl.classList.add('hidden');
+
+          gridEl.innerHTML = filtered
+            .map(function (court) {
+              return `
+                <article class="bg-navy-900 text-white rounded-xl border border-navy-800 p-6 flex flex-col justify-between hover:border-pickle-400/60 transition-colors duration-150">
+                  <div>
+                    <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-pickle-400 font-medium tabular-nums">
+                      <span>${court.courtLabel}</span>
+                      <span aria-hidden="true" class="text-slate-500">·</span>
+                      <span class="text-slate-300">${court.hours}</span>
+                    </div>
+
+                    <h3 class="font-display text-2xl font-bold text-white mt-2 leading-snug">
+                      ${court.name}
+                    </h3>
+
+                    <p class="mt-1 text-xs sm:text-sm text-slate-300">
+                      ${court.address}
+                    </p>
+
+                    <p class="mt-3.5 text-sm text-slate-300 leading-relaxed">
+                      ${court.description}
+                    </p>
+                  </div>
+
+                  <div class="mt-6 pt-4 border-t border-white/10">
+                    <div class="flex items-baseline justify-between gap-2 mb-4">
+                      <span class="text-xs text-slate-400">Court Rate</span>
+                      <span class="font-mono text-base font-semibold text-pickle-400 tabular-nums">${court.rateDisplay}</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2.5">
+                      <button
+                        type="button"
+                        data-court-id="${court.id}"
+                        class="open-court-modal px-3 py-2 text-xs font-semibold bg-white/10 text-white rounded-lg hover:bg-white/15 transition-colors whitespace-nowrap"
+                      >
+                        Schedule &amp; Info
+                      </button>
+                      <button
+                        type="button"
+                        data-lat="${court.lat}"
+                        data-lng="${court.lng}"
+                        data-label="${court.name} · ${court.address}"
+                        class="locate-court-btn px-3 py-2 text-xs font-semibold bg-pickle-400 text-navy-950 rounded-lg hover:bg-pickle-300 transition-colors whitespace-nowrap"
+                      >
+                        View on Map
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              `;
+            })
+            .join('');
+        }
+
+        // Filter Button Clicks
+        filterBtns.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            activeFilter = btn.getAttribute('data-filter') || 'all';
+            filterBtns.forEach(function (b) {
+              const isActive = b === btn;
+              b.className = isActive
+                ? 'court-filter-btn px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-navy-900 text-pickle-400 transition-colors duration-150 whitespace-nowrap shrink-0'
+                : 'court-filter-btn px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors duration-150 whitespace-nowrap shrink-0';
+            });
+            renderCourts();
+          });
+        });
+
+        searchInput.addEventListener('input', function (e) {
+          searchQuery = e.target.value || '';
+          renderCourts();
+        });
+
+        sortSelect.addEventListener('change', function (e) {
+          sortBy = e.target.value || 'featured';
+          renderCourts();
+        });
+
+        resetFiltersBtn.addEventListener('click', function () {
+          activeFilter = 'all';
+          searchQuery = '';
+          sortBy = 'featured';
+          searchInput.value = '';
+          sortSelect.value = 'featured';
+          filterBtns[0].click();
+        });
+
+        // Interactive Google Maps Controller
+        const mapIframe = document.getElementById('cebu-google-map');
+        const mapLabel = document.getElementById('map-active-label');
+        const mapPinBtns = document.querySelectorAll('.map-pin-btn');
+        const resetMapBtn = document.getElementById('reset-map-btn');
+
+        function updateMapLocation(lat, lng, zoom, label, scrollIntoView) {
+          const z = zoom || 16;
+          mapIframe.src = 'https://maps.google.com/maps?q=' + encodeURIComponent(lat + ',' + lng) + '&hl=en&z=' + z + '&output=embed';
+          mapLabel.textContent = 'Viewing: ' + label;
+
+          mapPinBtns.forEach(function (btn) {
+            const matches = btn.getAttribute('data-lat') === String(lat) && btn.getAttribute('data-lng') === String(lng);
+            btn.className = matches
+              ? 'map-pin-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-navy-900 text-pickle-400 whitespace-nowrap shrink-0 transition-colors'
+              : 'map-pin-btn px-3 py-1.5 text-xs font-medium rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-navy-700 whitespace-nowrap shrink-0 transition-colors';
+          });
+
+          if (scrollIntoView) {
+            document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+
+        mapPinBtns.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            updateMapLocation(
+              btn.getAttribute('data-lat'),
+              btn.getAttribute('data-lng'),
+              btn.getAttribute('data-zoom') || 16,
+              btn.getAttribute('data-label'),
+              false
+            );
+          });
+        });
+
+        resetMapBtn.addEventListener('click', function () {
+          updateMapLocation('10.338', '123.931', 13, 'Metro Cebu Hub (10.338, 123.931)', false);
+        });
+
+        // Modal Logic + Event Delegation on Court Cards
+        const modalEl = document.getElementById('court-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const closeSecondaryBtn = document.getElementById('modal-close-secondary');
+        const modalMapJumpBtn = document.getElementById('modal-map-jump-btn');
+        let currentModalCourt = null;
+
+        function openCourtModal(court) {
+          currentModalCourt = court;
+          document.getElementById('modal-court-area').textContent = court.cityGroup + ' · ' + court.surface;
+          document.getElementById('modal-court-name').textContent = court.name;
+          document.getElementById('modal-court-desc').textContent = court.description;
+          document.getElementById('modal-court-address').textContent = court.address;
+          document.getElementById('modal-court-count').textContent = court.courtLabel;
+          document.getElementById('modal-court-rate').textContent = court.rateDisplay;
+          document.getElementById('modal-court-hours').textContent = court.hours;
+          document.getElementById('modal-court-amenities').textContent = court.openPlay;
+          modalEl.classList.remove('hidden');
+          modalEl.classList.add('flex');
+        }
+
+        function closeCourtModal() {
+          modalEl.classList.add('hidden');
+          modalEl.classList.remove('flex');
+        }
+
+        gridEl.addEventListener('click', function (e) {
+          const modalTrigger = e.target.closest('.open-court-modal');
+          if (modalTrigger) {
+            const id = modalTrigger.getAttribute('data-court-id');
+            const found = CEBU_COURTS.find(function (c) {
+              return c.id === id;
+            });
+            if (found) openCourtModal(found);
+            return;
+          }
+
+          const mapTrigger = e.target.closest('.locate-court-btn');
+          if (mapTrigger) {
+            updateMapLocation(
+              mapTrigger.getAttribute('data-lat'),
+              mapTrigger.getAttribute('data-lng'),
+              16,
+              mapTrigger.getAttribute('data-label'),
+              true
+            );
+          }
+        });
+
+        closeModalBtn.addEventListener('click', closeCourtModal);
+        closeSecondaryBtn.addEventListener('click', closeCourtModal);
+        modalEl.addEventListener('click', function (e) {
+          if (e.target === modalEl) closeCourtModal();
+        });
+
+        modalMapJumpBtn.addEventListener('click', function () {
+          if (currentModalCourt) {
+            closeCourtModal();
+            updateMapLocation(
+              currentModalCourt.lat,
+              currentModalCourt.lng,
+              16,
+              currentModalCourt.name + ' · ' + currentModalCourt.address,
+              true
+            );
+          }
+        });
+
+        // Doubles / Ambagan Session Split Calculator
+        const calcRate = document.getElementById('calc-rate');
+        const calcHours = document.getElementById('calc-hours');
+        const calcPlayers = document.getElementById('calc-players');
+        const calcPaddles = document.getElementById('calc-paddles');
+        const calcPerPlayer = document.getElementById('calc-per-player');
+        const calcTotal = document.getElementById('calc-total');
+
+        function updateSplitCalculator() {
+          const rate = Math.max(0, Number(calcRate.value) || 400);
+          const hours = Math.min(12, Math.max(1, Number(calcHours.value) || 1));
+          const players = Math.min(20, Math.max(1, Number(calcPlayers.value) || 4));
+          const paddles = Math.min(20, Math.max(0, Number(calcPaddles.value) || 0));
+
+          const total = rate * hours + paddles * 50;
+          const perPlayer = Math.ceil(total / players);
+
+          calcTotal.textContent = '₱' + total.toLocaleString('en-PH');
+          calcPerPlayer.textContent = '₱' + perPlayer.toLocaleString('en-PH');
+        }
+
+        [calcRate, calcHours, calcPlayers, calcPaddles].forEach(function (el) {
+          el.addEventListener('input', updateSplitCalculator);
+          el.addEventListener('change', updateSplitCalculator);
+        });
+
+        // Mobile Navigation Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const iconOpen = document.getElementById('menu-icon-open');
+        const iconClose = document.getElementById('menu-icon-close');
+
+        function setMobileMenu(open) {
+          mobileMenuBtn.setAttribute('aria-expanded', String(open));
+          mobileMenu.classList.toggle('hidden', !open);
+          iconOpen.classList.toggle('hidden', open);
+          iconClose.classList.toggle('hidden', !open);
+        }
+
+        mobileMenuBtn.addEventListener('click', function () {
+          const isOpen = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+          setMobileMenu(!isOpen);
+        });
+
+        document.querySelectorAll('.mobile-nav-link').forEach(function (link) {
+          link.addEventListener('click', function () {
+            setMobileMenu(false);
+          });
+        });
+
+        // Validated Community Inquiry Form
+        const inquiryForm = document.getElementById('inquiry-form');
+        const formError = document.getElementById('form-error');
+        const formSuccess = document.getElementById('form-success');
+
+        inquiryForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const name = document.getElementById('inq-name').value.trim();
+          const contact = document.getElementById('inq-contact').value.trim();
+          const message = document.getElementById('inq-message').value.trim();
+
+          const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+          const validPhone = /^(\+?63|0)?9\d{2}[-\s]?\d{3}[-\s]?\d{4}$/.test(contact);
+
+          if (!name || name.length < 2) {
+            formError.textContent = 'Please enter your full name.';
+            formError.classList.remove('hidden');
+            formSuccess.classList.add('hidden');
+            return;
+          }
+
+          if (!validEmail && !validPhone) {
+            formError.textContent = 'Please enter a valid Philippine mobile number (e.g. 0917-123-4567) or email address.';
+            formError.classList.remove('hidden');
+            formSuccess.classList.add('hidden');
+            return;
+          }
+
+          if (!message || message.length < 8) {
+            formError.textContent = 'Please include a brief note about your court inquiry or update.';
+            formError.classList.remove('hidden');
+            formSuccess.classList.add('hidden');
+            return;
+          }
+
+          formError.classList.add('hidden');
+          formSuccess.classList.remove('hidden');
+          inquiryForm.reset();
+        });
+
+        // =========================================================================
+        // PICKLEBOT AI FLOATING CHAT WIDGET CONTROLLER (SERVER-SIDE GEMINI PROXY)
+        // =========================================================================
+        const pbToggleBtn = document.getElementById('picklebot-toggle-btn');
+        const pbWindow = document.getElementById('picklebot-window');
+        const pbCloseBtn = document.getElementById('picklebot-close-btn');
+        const pbMessages = document.getElementById('picklebot-messages');
+        const pbTyping = document.getElementById('picklebot-typing');
+        const pbForm = document.getElementById('picklebot-form');
+        const pbInput = document.getElementById('picklebot-input');
+        const pbSendBtn = document.getElementById('picklebot-send-btn');
+        const pbStarters = document.getElementById('picklebot-starters');
+
+        const pbHistory = [];
+        let pbPending = false;
+
+        function escapeHtml(str) {
+          return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+        }
+
+        function formatBotMarkdown(rawText) {
+          const escaped = escapeHtml(rawText);
+          const withInline = escaped
+            .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-pickle-300">$1</strong>')
+            .replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+          const lines = withInline.split(/\r?\n/);
+          const htmlParts = [];
+          let inList = false;
+
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            const bulletMatch = line.match(/^[-*•]\s+(.*)$/);
+            const numMatch = line.match(/^\d+\.\s+(.*)$/);
+
+            if (bulletMatch || numMatch) {
+              if (!inList) {
+                htmlParts.push('<ul class="list-disc pl-4 space-y-1 my-1.5">');
+                inList = true;
+              }
+              htmlParts.push('<li>' + (bulletMatch ? bulletMatch[1] : numMatch[1]) + '</li>');
+            } else {
+              if (inList) {
+                htmlParts.push('</ul>');
+                inList = false;
+              }
+              if (line.length > 0) {
+                htmlParts.push('<p class="mb-2 last:mb-0">' + line + '</p>');
+              }
+            }
+          }
+
+          if (inList) {
+            htmlParts.push('</ul>');
+          }
+
+          return htmlParts.join('');
+        }
+
+        function scrollChatToBottom() {
+          pbMessages.scrollTop = pbMessages.scrollHeight;
+        }
+
+        function appendChatBubble(role, text, isError) {
+          const wrapper = document.createElement('div');
+          if (role === 'user') {
+            wrapper.className = 'flex flex-col items-end';
+            wrapper.innerHTML =
+              '<span class="text-[11px] font-medium text-slate-500 mb-1 px-1">You</span>' +
+              '<div class="max-w-[85%] rounded-xl rounded-tr-sm bg-pickle-400 text-navy-950 font-medium px-3.5 py-2.5 text-sm leading-relaxed shadow-sm break-words">' +
+              escapeHtml(text) +
+              '</div>';
+          } else {
+            wrapper.className = 'flex flex-col items-start';
+            const bubbleStyle = isError
+              ? 'bg-red-50 border border-red-200 text-red-800'
+              : 'bg-navy-900 text-white';
+            const contentHtml = isError ? escapeHtml(text) : formatBotMarkdown(text);
+            wrapper.innerHTML =
+              '<span class="text-[11px] font-semibold text-navy-700 mb-1 px-1">PickleBot</span>' +
+              '<div class="max-w-[88%] rounded-xl rounded-tl-sm ' +
+              bubbleStyle +
+              ' px-3.5 py-2.5 text-sm leading-relaxed shadow-sm break-words">' +
+              contentHtml +
+              '</div>';
+          }
+          pbMessages.appendChild(wrapper);
+          scrollChatToBottom();
+        }
+
+        function setPickleBotOpen(open) {
+          pbToggleBtn.setAttribute('aria-expanded', String(open));
+          if (open) {
+            pbWindow.classList.remove('hidden');
+            pbWindow.classList.add('flex');
+            scrollChatToBottom();
+            setTimeout(function () {
+              pbInput.focus();
+            }, 50);
+          } else {
+            pbWindow.classList.add('hidden');
+            pbWindow.classList.remove('flex');
+          }
+        }
+
+        pbToggleBtn.addEventListener('click', function () {
+          const isOpen = pbToggleBtn.getAttribute('aria-expanded') === 'true';
+          setPickleBotOpen(!isOpen);
+        });
+
+        pbCloseBtn.addEventListener('click', function () {
+          setPickleBotOpen(false);
+        });
+
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') {
+            if (!modalEl.classList.contains('hidden')) {
+              closeCourtModal();
+            } else if (!pbWindow.classList.contains('hidden')) {
+              setPickleBotOpen(false);
+            }
+          }
+        });
+
+        async function sendPickleBotMessage(messageText) {
+          const trimmed = (messageText || '').trim();
+          if (!trimmed || pbPending) return;
+
+          if (pbStarters) {
+            pbStarters.classList.add('hidden');
+          }
+
+          appendChatBubble('user', trimmed, false);
+          pbHistory.push({ role: 'user', text: trimmed });
+          pbInput.value = '';
+
+          pbPending = true;
+          pbSendBtn.disabled = true;
+          pbInput.disabled = true;
+          pbTyping.classList.remove('hidden');
+          scrollChatToBottom();
+
+          try {
+            const response = await fetch('/api/chat', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ messages: pbHistory }),
+            });
+
+            const data = await response.json().catch(function () {
+              return {};
+            });
+
+            if (!response.ok) {
+              throw new Error(data.error || 'Unable to reach PickleBot right now.');
+            }
+
+            const reply = data.reply || 'Unsay score! Let me know how else I can help with Cebu courts.';
+            pbHistory.push({ role: 'model', text: reply });
+            appendChatBubble('model', reply, false);
+          } catch (err) {
+            // Remove failed turn so user can retry cleanly
+            pbHistory.pop();
+            appendChatBubble(
+              'model',
+              err instanceof Error ? err.message : 'Connection interrupted. Please try sending your message again.',
+              true
+            );
+          } finally {
+            pbPending = false;
+            pbSendBtn.disabled = false;
+            pbInput.disabled = false;
+            pbTyping.classList.add('hidden');
+            pbInput.focus();
+            scrollChatToBottom();
+          }
+        }
+
+        pbForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          sendPickleBotMessage(pbInput.value);
+        });
+
+        document.querySelectorAll('.picklebot-starter-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            const prompt = btn.getAttribute('data-prompt');
+            if (prompt) {
+              sendPickleBotMessage(prompt);
+            }
+          });
+        });
+
+        // Initial Render
+        renderCourts();
+        updateSplitCalculator();
+      })();
+    </script>
+  </body>
+</html>

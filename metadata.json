@@ -1,0 +1,6 @@
+{
+  "name": "Zero Zero Two Cebu",
+  "description": "Unsay Score? Court Finder Ni! Find pickleball courts, check real-time schedules, rent gear, and locate open-play sessions across Metro Cebu.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
